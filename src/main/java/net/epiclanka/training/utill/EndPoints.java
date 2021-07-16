@@ -8,4 +8,5 @@ public class EndPoints {
 	*/
 	public static final String paymentControllerValue = "payment";
 	public static final String paymentCustomerHandlerEndpoint = "/customer";
+	public static final String paymentHstoryOfCustomersHandlerEndpoint = "/history";
 }

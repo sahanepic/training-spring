@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import net.epiclanka.training.mapper.CustomerBillMapper;
+import net.epiclanka.training.model.CustomerBill;
+import net.epiclanka.training.model.CustomerBillHistory;
 import net.epiclanka.training.model.CustomerBillReq;
 import net.epiclanka.training.model.CustomerBillRes;
 import net.epiclanka.training.service.implement.CustomerPaymentServiceImplement;
@@ -24,8 +27,18 @@ import net.epiclanka.training.utill.EndPoints;
 public class BakeryBillController {
 
 	
-	@Autowired
+	 
+	
 	private CustomerPaymentServiceImplement customerPaymentService;
+	
+	
+	private CustomerBillMapper customerBillMapper;
+	
+	@Autowired
+	public BakeryBillController(CustomerPaymentServiceImplement customerPaymentServiceImplement ,CustomerBillMapper customerBillMapper) {
+		this.customerBillMapper = customerBillMapper;
+		this.customerPaymentService = customerPaymentServiceImplement;
+	}
 	
 	@GetMapping
 	public String welcome() {
@@ -35,10 +48,15 @@ public class BakeryBillController {
 	
 	@PostMapping(value = EndPoints.paymentCustomerHandlerEndpoint , consumes =MediaType.APPLICATION_JSON_VALUE , produces = MediaType.APPLICATION_JSON_VALUE )
 	public ResponseEntity<CustomerBillRes> customerPayment(@Valid @RequestBody CustomerBillReq customerBillReq ) {	
-		
-		return   customerPaymentService.customerPeymentHandle();
+		CustomerBill customerBill = customerBillMapper.customerbillRequestMapToObject(customerBillReq);
+		return   customerPaymentService.customerPeymentHandle(customerBill);
 	}
 	
+	@GetMapping(value = EndPoints.paymentHstoryOfCustomersHandlerEndpoint)
+	public ResponseEntity<CustomerBillHistory> customerPaymentHistory() {	
+		 
+		return   customerPaymentService.customerPeymentHistoryHandle();
+	}
 	
 	
 }
